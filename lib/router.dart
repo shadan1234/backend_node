@@ -7,7 +7,9 @@ import 'package:node/features/auth/screens/auth_screen.dart';
 import 'package:node/features/home/screens/category_deals_screen.dart';
 import 'package:node/features/home/screens/home_screens.dart';
 import 'package:node/features/home/widgets/top_category.dart';
+import 'package:node/features/product_details/screens/product_details_screen.dart';
 import 'package:node/features/search/screens/search_screen.dart';
+import 'package:node/models/product.dart';
 
 Route<dynamic> generateRoute(RouteSettings routeSettings) {
   switch (routeSettings.name) {
@@ -31,9 +33,20 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
                 category: category,
               ));
     case SearchScreen.routeName:
-    var searchQuery=routeSettings.arguments as String;
+      var searchQuery = routeSettings.arguments as String;
 
-    return MaterialPageRoute(settings: routeSettings, builder: (_)=> SearchScreen(searchQuery: searchQuery ,));
+      return MaterialPageRoute(
+          settings: routeSettings,
+          builder: (_) => SearchScreen(
+                searchQuery: searchQuery,
+              ));
+    case ProductDetailScreen.routeName:
+      var product = routeSettings.arguments as Product;
+      return MaterialPageRoute(
+          settings: routeSettings,
+          builder: (_) => ProductDetailScreen(
+                product: product,
+              ));
     default:
       return MaterialPageRoute(
           settings: routeSettings,

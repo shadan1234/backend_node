@@ -65,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         borderSide: BorderSide(color: Colors.black38, width: 1, ),
                          ),
                          hintText: 'Search Amazon.in',
-                         hintStyle: TextStyle(
+                         hintStyle: const TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 17
                          )
@@ -78,15 +78,15 @@ class _HomeScreenState extends State<HomeScreen> {
              Container(
               color: Colors.transparent,
               height: 42,
-              margin: EdgeInsets.symmetric(horizontal:10),
-              child: Icon(Icons.mic,color: Colors.black,size: 25,),
+              margin: const EdgeInsets.symmetric(horizontal:10),
+              child: const Icon(Icons.mic,color: Colors.black,size: 25,),
              )
             ],
           ),
         ),
       )
-     , body:SingleChildScrollView(
-       child: Column(children: [
+     , body:const SingleChildScrollView(
+       child:  Column(children: [
             AddressBox(),
             SizedBox(height: 10,),
             TopCategories(),

@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:node/models/rating.dart';
+
 class Product {
   final String name;
   final String description;
@@ -9,6 +11,7 @@ class Product {
   final double price;
   final String category;
   final String? id;
+  final List<Rating>?rating;
 
   Product({
     required this.name,
@@ -20,6 +23,7 @@ class Product {
     
     
     this.id,
+    this.rating
   });
 
   Map<String, dynamic> toMap() {
@@ -31,6 +35,7 @@ class Product {
       'price': price,
       'category': category,
       'id': id,
+      'rating':rating,
     };
   }
 
@@ -45,6 +50,7 @@ class Product {
       
       
       id: map['_id'],
+      // rating: map['ratings']!=null?List<Rating>.from(map['rating'])
     );
   }
 
