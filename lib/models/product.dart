@@ -46,7 +46,7 @@ class Product {
         category: map['category'] ?? '',
         id: map['_id'],
         rating: map['ratings'] != null
-            ? List<Rating>.from(map['rating']?.map((x) => Rating.fromMap(x)))
+            ? List<Rating>.from(map['ratings']?.map((x) => Rating.fromMap(x)))
             : []);
   }
 

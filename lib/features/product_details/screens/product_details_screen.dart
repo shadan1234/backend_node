@@ -22,14 +22,20 @@ class ProductDetailScreen extends StatefulWidget {
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
+   
   final ProductDetailsServices productDetailsServices =
       ProductDetailsServices();
   double avgRating=0;
   double myRating=0;
-
+  
   void navigateToSearchScreen(String query) {
     Navigator.pushNamed(context, SearchScreen.routeName, arguments: query);
   }
+
+  void addToCart(){
+    productDetailsServices.addToCart(context: context, product:widget.product );
+  }
+
   @override
   void initState() {
     double totalRating=0;
@@ -39,7 +45,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         myRating=widget.product.rating![i].rating;
       }
     }
-    avgRating=totalRating/(widget.product.rating!.length);
+    avgRating=widget.product.rating!.length==0?0:totalRating/(widget.product.rating!.length);
     super.initState();
   }
 
@@ -188,22 +194,24 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               padding: const EdgeInsets.all(10),
               child: CustomButton(text: 'Buy Now', onTap: () {}),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Padding(
               padding: const EdgeInsets.all(10),
               child: CustomButton(
-                  color: Color.fromRGBO(254, 216, 19, 1),
+                  color: const Color.fromRGBO(254, 216, 19, 1),
                   text: 'Add to Cart',
-                  onTap: () {}),
+                  onTap: () {
+                    addToCart();
+                  }),
             ),
             Container(
               color: Colors.black12,
               height: 5,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
               child: Text(
                 'Rate the Product',
                 style: TextStyle(
@@ -218,9 +226,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               direction: Axis.horizontal,
               allowHalfRating: true,
               itemCount: 5,
-              itemPadding: EdgeInsets.symmetric(horizontal: 4),
+              itemPadding: const EdgeInsets.symmetric(horizontal: 4),
               itemBuilder: (context, index) {
-                return Icon(
+                return const Icon(
                   Icons.star,
                   color: GlobalVariables.secondaryColor,
                 );
