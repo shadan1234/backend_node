@@ -32,7 +32,7 @@ const productSchema=mongoose.Schema({
     },
     //ratings
     ratings:[
-        ratingSchema
+    ratingSchema
     ],
 
 });

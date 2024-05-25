@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:node/common/widgets/bottom_bar.dart';
+import 'package:node/features/address/screens/address_screen.dart';
 import 'package:node/features/admin/screens/add_product_screens.dart';
 import 'package:node/features/auth/screens/auth_screen.dart';
 import 'package:node/features/home/screens/category_deals_screen.dart';
@@ -47,6 +48,9 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
           builder: (_) => ProductDetailScreen(
                 product: product,
               ));
+    case AddressScreen.routeName:
+      return MaterialPageRoute(
+          settings: routeSettings, builder: (_) => const AddressScreen());
     default:
       return MaterialPageRoute(
           settings: routeSettings,
