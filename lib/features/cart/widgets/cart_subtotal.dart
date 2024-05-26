@@ -8,7 +8,7 @@ class CartSubtotal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user=Provider.of<UserProvider>(context,listen: false).user;
+    final user=Provider.of<UserProvider>(context,).user;
 
     int sum=0;
     user.cart.map((e)=> sum+=e['quantity']*e['product']['price'] as int).toList();

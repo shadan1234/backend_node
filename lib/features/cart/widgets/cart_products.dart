@@ -36,7 +36,7 @@ class _CartProductState extends State<CartProduct> {
   @override
   Widget build(BuildContext context) {
     final productCart =
-        Provider.of<UserProvider>(context).user.cart[widget.index];
+        Provider.of<UserProvider>(context,listen: false).user.cart[widget.index];
     final product = Product.fromMap(productCart['product']);
     final quantity = productCart['quantity'];
     return Column(
