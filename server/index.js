@@ -13,7 +13,7 @@ const productRouter = require("./routes/product");
 const userRouter = require("./routes/user");
 
 // INIT 
-const PORT = 3000; // convention to use 3000 can be any no.
+const PORT = process.env.PORT ||  3000; // convention to use 3000 can be any no.
 
 const app = express(); // express initialization
 const DB="mongodb+srv://shadan:abcdefg@cluster0.zfqxkem.mongodb.net/?retryWrites=true&w=majority";

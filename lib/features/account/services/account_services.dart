@@ -6,9 +6,11 @@ import 'package:http/http.dart' as http;
 import 'package:node/constants/error_handling.dart';
 import 'package:node/constants/global_variable.dart';
 import 'package:node/constants/utils.dart';
+import 'package:node/features/auth/screens/auth_screen.dart';
 import 'package:node/models/user.dart';
 import 'package:node/providers/user_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../models/order.dart';
 
@@ -49,5 +51,14 @@ class AccountServices{
     }
     print(orderList);
     return orderList;
+  }
+  void logOut({required BuildContext context})async{
+        try {
+           SharedPreferences sharedPreferences=await SharedPreferences.getInstance();
+           await sharedPreferences.setString('x-auth-token', '');
+           Navigator.pushNamedAndRemoveUntil(context, AuthScreen.routeName, (route) => false ,);
+        } catch (e) {
+          showSnackBar(context, e.toString());
+        }
   }
 }
