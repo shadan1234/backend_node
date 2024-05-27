@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:node/constants/error_handling.dart';
 import 'package:node/constants/global_variable.dart';
@@ -9,37 +10,44 @@ import 'package:node/models/user.dart';
 import 'package:node/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../../../models/order.dart';
+
 class AccountServices{
-   void fetchOrders(
+   Future<List<Order>> fetchOrders(
      {required BuildContext context,
-       required String address,
+       
       }
    )async{
      
      
     final userProvider = Provider.of<UserProvider>(context, listen: false);
+    List<Order>orderList=[];
     try {
+     
       
-      http.Response res = await http.post(
-        Uri.parse('$uri/api/save-user-address'),
+      http.Response res = await http.get(
+        Uri.parse('$uri/api/orders/me'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'x-auth-token': userProvider.user.token,
         },
-        body: jsonEncode({'address':address})
+      
       );
+       debugPrint(res.body);
      
       httpErrorHandle(
           response: res,
           context: context,
           onSuccess: () {
-           User user= userProvider.user.copyWith(
-              address: jsonDecode(res.body)['address']
-            );
-            userProvider.setUserFromModel(user);
+          // List<Order> me map karna hai ie dart model me map karo from json then display on frontend part
+          for(int i=0;i<jsonDecode(res.body).length ;i++){
+           orderList.add(Order.fromJson(jsonEncode(jsonDecode(res.body)[i])));
+          }
           });
     } catch (e) {
       showSnackBar(context, e.toString());
     }
+    print(orderList);
+    return orderList;
   }
 }
