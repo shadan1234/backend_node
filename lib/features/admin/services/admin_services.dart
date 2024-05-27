@@ -5,14 +5,19 @@ import 'dart:ui';
 import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter/widgets.dart';
 import 'package:node/constants/error_handling.dart';
 import 'package:node/constants/global_variable.dart';
 import 'package:node/constants/utils.dart';
+import 'package:node/features/admin/models/sales.dart';
 import 'package:node/models/product.dart';
 import 'package:http/http.dart' as http;
 import 'package:node/models/user.dart';
 import 'package:node/providers/user_provider.dart';
 import 'package:provider/provider.dart';
+
+import '../../../models/order.dart';
 
 class AdminServices {
   void sellProduct(
@@ -120,5 +125,90 @@ class AdminServices {
     } catch (e) {
       showSnackBar(context, e.toString());
     }
+  }
+
+  Future<List<Order>> fetchAllOrders(BuildContext context) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    List<Order> ordersList = [];
+    try {
+      http.Response res = await http.get(
+        Uri.parse('$uri/admin/get-orders'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token,
+        },
+      );
+      httpErrorHandle(
+          response: res,
+          context: context,
+          onSuccess: () {
+            // we decode to convert the string type of thing to actual product list
+            // then we encode it again cuz we need to get string as fromJson accepts a string
+            // also presently after decoding and getting index ith we have an object
+            for (int i = 0; i < jsonDecode(res.body).length; i++) {
+              ordersList
+                  .add(Order.fromJson(jsonEncode(jsonDecode(res.body)[i])));
+            }
+          });
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+    return ordersList;
+  }
+
+  void changeOrderStatus(
+      {required BuildContext context,
+      required int status,
+      required VoidCallback onSuccess,
+      required Order order}) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    try {
+      http.Response res =
+          await http.post(Uri.parse('$uri/admin/change-order-status'),
+              headers: <String, String>{
+                'Content-Type': 'application/json; charset=UTF-8',
+                'x-auth-token': userProvider.user.token,
+              },
+              body: jsonEncode({'id': order.id, 'status': status}));
+      httpErrorHandle(response: res, context: context, onSuccess: onSuccess);
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+  }
+
+  Future<Map<String, dynamic>> getEarnings(BuildContext context) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    List<Sales> sales = [];
+    int totalEarning = 0;
+    try {
+      http.Response res = await http.get(
+        Uri.parse('$uri/admin/analytics'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token,
+        },
+      );
+      httpErrorHandle(
+          response: res,
+          context: context,
+          onSuccess: () {
+            var response = jsonDecode(res.body);
+            totalEarning = response['totalEarnings'];
+            sales = [
+              Sales('Mobiles', response['mobileEarnings']),
+              Sales('Essentials', response['essentialsEarnings']),
+              Sales('Appliances', response['applianceEarnings']),
+              Sales('Books', response['booksEarnings']),
+              Sales('Fashion', response['fashionEarnings']),
+            ];
+          });
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+    return {
+      'sales':sales,
+      'totalEarnings':totalEarning
+    };
   }
 }

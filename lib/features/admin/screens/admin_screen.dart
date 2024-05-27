@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:node/features/admin/screens/analytics_screen.dart';
+import 'package:node/features/admin/screens/orders_screen.dart';
 import 'package:node/features/admin/screens/posts_screen.dart';
 
 import '../../../constants/global_variable.dart';
@@ -16,12 +18,8 @@ class _AdminScreenState extends State<AdminScreen> {
   static const double bottomBarBorderWidth = 5;
   List<Widget> pages = [
     const PostsScreen(),
-    const Center(
-      child: Text('Analytics Page'),
-    ),
-    const Center(
-      child: Text('Orders Page'),
-    ),
+    const AnalayticsScreen(),
+    const OrdersScreen()
   ];
   void updatePage(int page) {
     setState(() {
